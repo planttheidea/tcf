@@ -7,7 +7,7 @@ A functional try / catch / finally with async support
 - [Usage](#usage)
 - [Methods](#methods)
   - [tcf](#tcf)
-  - [tcfAsync](#tcfAsync)
+  - [tcfAsync](#tcfasync)
   - [setResolver](#setresolver)
 - [Development](#development)
 
