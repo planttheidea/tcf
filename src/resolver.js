@@ -1,7 +1,18 @@
 /**
+ * @function defaultResolver
+ *
+ * @description
+ * the built-in default resolver method
+ *
+ * @param {function} fn the function to resolve
+ * @returns {Promise}
+ */
+export const defaultResolver = (fn) => new Promise((resolve) => resolve(fn()));
+
+/**
  * @constant {Object} RESOLVER
  */
-export const RESOLVER = {resolve: (fn) => new Promise((resolve) => resolve(fn()))};
+export const RESOLVER = {resolve: defaultResolver};
 
 /**
  * @function setResolver
@@ -10,6 +21,7 @@ export const RESOLVER = {resolve: (fn) => new Promise((resolve) => resolve(fn())
  * set the default resolver
  *
  * @param {function} customResolver the resolver to use in place of the standard resolver
- * @returns {boolean}
+ * @returns {boolean} was the resolver successfully set
  */
-export const setResolver = (customResolver) => (RESOLVER.resolve = customResolver) && true;
+export const setResolver = (customResolver) =>
+  typeof customResolver === 'function' && !!(RESOLVER.resolve = customResolver);
