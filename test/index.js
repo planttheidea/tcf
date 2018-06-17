@@ -6,31 +6,31 @@ import sinon from 'sinon';
 import * as index from 'src/index';
 import * as resolver from 'src/resolver';
 
-test('if tcf will handle a successful try scenario', (t) => {
+test('if tcfSync will handle a successful try scenario', (t) => {
   const value = 'foo';
 
   const tryFn = () => value;
   const catchFn = null;
   const finallyFn = null;
 
-  const result = index.tcf(tryFn, catchFn, finallyFn);
+  const result = index.tcfSync(tryFn, catchFn, finallyFn);
 
   t.is(result, value);
 });
 
-test('if tcf will handle a failed try scenario with no catch', (t) => {
+test('if tcfSync will handle a failed try scenario with no catch', (t) => {
   const tryFn = () => {
     throw new Error('boom');
   };
   const catchFn = null;
   const finallyFn = null;
 
-  const result = index.tcf(tryFn, catchFn, finallyFn);
+  const result = index.tcfSync(tryFn, catchFn, finallyFn);
 
   t.is(result, void 0);
 });
 
-test('if tcf will handle a failed try scenario with a catch', (t) => {
+test('if tcfSync will handle a failed try scenario with a catch', (t) => {
   const error = new Error('boom');
   const value = 'foo';
 
@@ -41,7 +41,7 @@ test('if tcf will handle a failed try scenario with a catch', (t) => {
 
   const finallyFn = null;
 
-  const result = index.tcf(tryFn, catchFn, finallyFn);
+  const result = index.tcfSync(tryFn, catchFn, finallyFn);
 
   t.true(catchFn.calledOnce);
   t.true(catchFn.calledWith(error));
@@ -49,20 +49,20 @@ test('if tcf will handle a failed try scenario with a catch', (t) => {
   t.is(result, value);
 });
 
-test('if tcf will handle a successful try scenario with a finally with no return in the finally', (t) => {
+test('if tcfSync will handle a successful try scenario with a finally with no return in the finally', (t) => {
   const value = 'foo';
 
   const tryFn = () => value;
   const catchFn = null;
   const finallyFn = sinon.spy();
 
-  const result = index.tcf(tryFn, catchFn, finallyFn);
+  const result = index.tcfSync(tryFn, catchFn, finallyFn);
 
   t.is(result, value);
   t.true(finallyFn.calledOnce);
 });
 
-test('if tcf will handle a successful try scenario with a finally with a return in the finally', (t) => {
+test('if tcfSync will handle a successful try scenario with a finally with a return in the finally', (t) => {
   const value = 'foo';
   const otherValue = 'bar';
 
@@ -70,13 +70,13 @@ test('if tcf will handle a successful try scenario with a finally with a return 
   const catchFn = null;
   const finallyFn = sinon.stub().returns(otherValue);
 
-  const result = index.tcf(tryFn, catchFn, finallyFn);
+  const result = index.tcfSync(tryFn, catchFn, finallyFn);
 
   t.is(result, otherValue);
   t.true(finallyFn.calledOnce);
 });
 
-test('if tcf will handle a failed try scenario with a finally with no return in the finally', (t) => {
+test('if tcfSync will handle a failed try scenario with a finally with no return in the finally', (t) => {
   const error = new Error('boom');
 
   const tryFn = () => {
@@ -85,7 +85,7 @@ test('if tcf will handle a failed try scenario with a finally with no return in 
   const catchFn = sinon.spy();
   const finallyFn = sinon.spy();
 
-  const result = index.tcf(tryFn, catchFn, finallyFn);
+  const result = index.tcfSync(tryFn, catchFn, finallyFn);
 
   t.is(result, void 0);
 
@@ -95,7 +95,7 @@ test('if tcf will handle a failed try scenario with a finally with no return in 
   t.true(finallyFn.calledOnce);
 });
 
-test('if tcf will handle a failed try scenario with a finally with a return in the finally', (t) => {
+test('if tcfSync will handle a failed try scenario with a finally with a return in the finally', (t) => {
   const error = new Error('boom');
   const value = 'foo';
 
@@ -105,7 +105,7 @@ test('if tcf will handle a failed try scenario with a finally with a return in t
   const catchFn = sinon.spy();
   const finallyFn = sinon.stub().returns(value);
 
-  const result = index.tcf(tryFn, catchFn, finallyFn);
+  const result = index.tcfSync(tryFn, catchFn, finallyFn);
 
   t.is(result, value);
 
@@ -224,8 +224,40 @@ test('if tcfAsync will handle a failed try scenario with a finally with a return
   t.true(finallyFn.calledOnce);
 });
 
+test('if tcf will handle sync operations', (t) => {
+  const value = 'foo';
+
+  const tryFn = () => value;
+  const catchFn = null;
+  const finallyFn = sinon.spy();
+
+  const result = index.tcf(tryFn, catchFn, finallyFn);
+
+  t.is(result, value);
+
+  t.true(finallyFn.calledOnce);
+});
+
+test('if tcf will handle async operations', async (t) => {
+  const value = 'foo';
+
+  const tryFn = async () => value;
+  const catchFn = null;
+  const finallyFn = sinon.spy();
+
+  const result = await index.tcf(tryFn, catchFn, finallyFn);
+
+  t.is(result, value);
+
+  t.true(finallyFn.calledOnce);
+});
+
 test('if tcf.async is the same method as tcfAsync', (t) => {
   t.is(index.tcf.async, index.tcfAsync);
+});
+
+test('if tcf.sync is the same method as tcfSync', (t) => {
+  t.is(index.tcf.sync, index.tcfSync);
 });
 
 test('if setResolver is exported', (t) => {
