@@ -14,7 +14,7 @@ A functional try / catch / finally with async support
 ## Usage
 
 ```javascript
-import {tcf, tcfAsync} from 'tcf';
+import { tcf, tcfAsync } from "tcf";
 
 // use for inline synchronous operations
 const syncResult = tcf(
@@ -28,7 +28,7 @@ const syncResult = tcf(
 );
 
 // or for asynchronous operations
-const asyncResult = await tcf(
+const asyncResult = await tcfAsync(
   async () => {
     // some dangerous computation
 
@@ -52,7 +52,7 @@ Run a synchronous `try` / `catch` / `finally` and return the result. If no `catc
 **NOTE**: This aligns with the [specification](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/try...catch), which means that returns from the `finallyFn` function will override any returns from `tryFn` or `catchFn`.
 
 ```javascript
-import tcf from "tcf";
+import { tcf } from "tcf";
 
 const result = tcf(() => "foo", null, () => "bar");
 
