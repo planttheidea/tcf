@@ -43,34 +43,30 @@ console.log('do something in finally', tcf(() => console.log('foo') || 'returned
 console.log('do something in finally unsafe', tcf(() => 'foo', () => {}, () => 'finally'));
 
 // regular async
-tcf
-  .async(() => new Bluebird((resolve) => setTimeout(() => resolve('async foo'), 1000)))
-  .then((value) => console.log('success async', value));
+tcf(() => new Bluebird((resolve) => setTimeout(() => resolve('async foo'), 1000))).then((value) =>
+  console.log('success async', value)
+);
 
 // do nothing on error async
-tcf
-  .async(() => new Promise((resolve, reject) => setTimeout(() => reject(Error('async boom')), 1000)))
-  .then((value) => console.log('do nothing on error async', value));
+tcf(() => new Promise((resolve, reject) => setTimeout(() => reject(Error('async boom')), 1000))).then((value) =>
+  console.log('do nothing on error async', value)
+);
 
 // do something on error async
-tcf
-  .async(
-    () => new Promise((resolve, reject) => setTimeout(() => reject(new Error('async boom')), 1000)),
-    (error) => console.error(error)
-  )
-  .then((value) => console.log('do something on error async', value));
+tcf(
+  () => new Promise((resolve, reject) => setTimeout(() => reject(new Error('async boom')), 1000)),
+  (error) => console.error(error)
+).then((value) => console.log('do something on error async', value));
 
 // do something in finally async
-tcf
-  .async(() => new Promise((resolve) => setTimeout(() => resolve('async foo'), 1000)), null, () =>
-    console.log('async finally')
-  )
-  .then((value) => console.log('do something in finally async', value));
+tcf(() => new Promise((resolve) => setTimeout(() => resolve('async foo'), 1000)), null, () =>
+  console.log('async finally')
+).then((value) => console.log('do something in finally async', value));
 
 // do something in finally unsafe async
-tcf
-  .async(() => new Promise((resolve) => setTimeout(() => resolve('async foo'), 1000)), null, () => 'async finally')
-  .then((value) => console.log('do something in finally unsafe async', value));
+tcf(() => new Promise((resolve) => setTimeout(() => resolve('async foo'), 1000)), null, () => 'async finally').then(
+  (value) => console.log('do something in finally unsafe async', value)
+);
 
 div.textContent = 'Check the console.';
 

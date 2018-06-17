@@ -5,16 +5,17 @@ A functional try / catch / finally with async support
 ## Table of contents
 
 - [Usage](#usage)
-- [Methods](#methods)
+- [Available methods](#available-methods)
   - [tcf](#tcf)
   - [tcfAsync](#tcfasync)
+  - [tcfSync](#tcfsync)
   - [setResolver](#setresolver)
 - [Development](#development)
 
 ## Usage
 
 ```javascript
-import { tcf, tcfAsync } from "tcf";
+import tcf from "tcf";
 
 // use for inline synchronous operations
 const syncResult = tcf(
@@ -28,7 +29,7 @@ const syncResult = tcf(
 );
 
 // or for asynchronous operations
-const asyncResult = await tcfAsync(
+const asyncResult = await tcf(
   async () => {
     // some dangerous computation
 
@@ -39,7 +40,7 @@ const asyncResult = await tcfAsync(
 );
 ```
 
-## Methods
+## Available methods
 
 #### tcf
 
@@ -47,19 +48,7 @@ const asyncResult = await tcfAsync(
 
 _Also available as the default export_
 
-Run a synchronous `try` / `catch` / `finally` and return the result. If no `catchFn` is passed, then `tryFn` is silently caught.
-
-**NOTE**: This aligns with the [specification](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/try...catch), which means that returns from the `finallyFn` function will override any returns from `tryFn` or `catchFn`.
-
-```javascript
-import { tcf } from "tcf";
-
-const result = tcf(() => "foo", null, () => "bar");
-
-console.log(result); // bar
-```
-
-It is recommended that you not return anything from `finallyFn` to avoid this potentially unexpected behavior. ([See this for more details](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/try...catch#The_finally_clause))
+Run a `try` / `catch` / `finally` and return the result. If the result of `tryFn` is a `Promise`, then it is processed using [`tcfAsync`](#tcfasync), else it is processed using [`tcfSync`](#tcfSync). If no `catchFn` is passed, then `tryFn` is silently caught.
 
 #### tcfAsync
 
@@ -80,6 +69,24 @@ console.log(result); // bar
 ```
 
 It is recommended that you not return anything from `finallyFn` to avoid this potentially unexpected behavior. ([See this for more details](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/try...catch#The_finally_clause))
+
+#### tcfSync
+
+`tcfSync(tryFn: function(): any[, catchFn: function(Error): any[, finallyFn: function(): any]]): any`
+
+_Also aliased as `tcf.sync`_
+
+Run a synchronous `try` / `catch` / `finally` and return the result. If no `catchFn` is passed, then `tryFn` is silently caught.
+
+**NOTE**: This aligns with the [specification](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/try...catch), which means that returns from the `finallyFn` function will override any returns from `tryFn` or `catchFn`.
+
+```javascript
+import { tcfSync } from "tcf";
+
+const result = tcfSync(() => "foo", null, () => "bar");
+
+console.log(result); // bar
+```
 
 #### setResolver
 
