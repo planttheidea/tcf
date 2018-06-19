@@ -18,3 +18,15 @@ export const noop = () => {};
  * @returns {function} the normalized function
  */
 export const getNormalizedFunction = (fn) => (typeof fn === 'function' ? fn : noop);
+
+/**
+ * @function throws
+ * 
+ * @description
+ * throw the error passed
+ * 
+ * @param {Error} error the error to throw
+ */
+export const throws = (error) => {
+  throw error;
+};

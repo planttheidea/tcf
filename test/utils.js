@@ -27,3 +27,15 @@ test('if getNormalizedFunction will return noop if the object passed is not a fu
 
   t.is(result, utils.noop);
 });
+
+test('if throws will throw the error passed it', (t) => {
+  const error = new Error('boom');
+
+  try {
+    utils.throws(error);
+
+    t.fail('Should blow up.');
+  } catch (e) {
+    t.pass(e);
+  }
+});

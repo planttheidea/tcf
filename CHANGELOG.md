@@ -1,5 +1,9 @@
 # tcf CHANGELOG
 
+## 2.1.0
+
+- Add `tf`, `tfAsync` and `tfSync` for `try` / `finally` usage with no `catch`
+
 ## 2.0.0
 
 #### BREAKING CHANGES

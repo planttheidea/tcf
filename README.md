@@ -56,7 +56,7 @@ Run a `try` / `catch` / `finally` and return the result. If the result of `tryFn
 
 _Also aliased as `tcf.async`_
 
-Run an asynchronous `try` / `catch` / `finally` and return the result. This has the same contract as `tcf`, but handles `Promise` values returned from `tryFn` as well as `async` functions.
+Run an asynchronous `try` / `catch` / `finally` and return the result. This has the same contract as `tcfSync`, but handles `Promise` values returned from `tryFn` as well as `async` functions.
 
 **NOTE**: This aligns with the [`Promise.prototype.finally` specification](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/finally), but also has the same contract as its synchronous counterpart, which means like in `tcf` any return from `finallyFn` will override any returns from `tryFn` or `catchFn`.
 
@@ -84,6 +84,52 @@ Run a synchronous `try` / `catch` / `finally` and return the result. If no `catc
 import { tcfSync } from "tcf";
 
 const result = tcfSync(() => "foo", null, () => "bar");
+
+console.log(result); // bar
+```
+
+It is recommended that you not return anything from `finallyFn` to avoid this potentially unexpected behavior. ([See this for more details](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/try...catch#The_finally_clause))
+
+#### tf
+
+`tf(tryFn: function(): any[, finallyFn: function(): any]): any`
+
+Run a `try` / `finally` and return the result. If the result of `tryFn` is a `Promise`, then it is processed using [`tcfAsync`](#tcfasync), else it is processed using [`tcfSync`](#tcfSync).
+
+**NOTE**: This is exactly the same as `tcf`, but without `catch` applied. This is usefull if you still want an error to be thrown if encountered, but you also need to do cleanup.
+
+#### tfAsync
+
+`tfAsync(tryFn: function(): Promise[, finallyFn: function(): any]): Promise`
+
+_Also aliased as `tf.async`_
+
+Run an asynchronous `try` / `finally` and return the result. This has the same contract as `tfSync`, but handles `Promise` values returned from `tryFn` as well as `async` functions.
+
+**NOTE**: This is exactly the same as `tcf`, but without `catch` applied. This is usefull if you still want an error to be thrown if encountered, but you also need to do cleanup.
+
+```javascript
+import { tfAsync } from "tcf";
+
+const result = await tfAsync(async () => "foo", async () => "bar");
+
+console.log(result); // bar
+```
+
+#### tfSync
+
+`tfSync(tryFn: function(): any[, finallyFn: function(): any]): any`
+
+_Also aliased as `tf.sync`_
+
+Run a synchronous `try` / `finally` and return the result.
+
+**NOTE**: This is exactly the same as `tcf`, but without `catch` applied. This is usefull if you still want an error to be thrown if encountered, but you also need to do cleanup.
+
+```javascript
+import { tfSync } from "tcf";
+
+const result = tfSync(() => "foo", () => "bar");
 
 console.log(result); // bar
 ```
