@@ -120,7 +120,7 @@ console.log(result); // bar
 
 `tfSync(tryFn: function(): any[, finallyFn: function(): any]): any`
 
-_Also aliased as `tcf.sync`_
+_Also aliased as `tf.sync`_
 
 Run a synchronous `try` / `finally` and return the result.
 
