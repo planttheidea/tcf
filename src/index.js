@@ -4,7 +4,9 @@ import {
 } from './resolver';
 
 // utils
-import {getNormalizedFunction} from './utils';
+import {
+  getNormalizedFunction, throws
+} from './utils';
 
 /**
  * @function tcfAsync
@@ -70,6 +72,14 @@ export const tcf = createTcf(false);
 
 tcf.async = tcfAsync;
 tcf.sync = tcfSync;
+
+export const tfAsync = (tryFn, finallyFn) => tcfAsync(tryFn, throws, finallyFn);
+export const tfSync = (tryFn, finallyFn) => tcfSync(tryFn, throws, finallyFn);
+
+export const tf = (tryFn, finallyFn) => tcf(tryFn, throws, finallyFn);
+
+tf.async = tfAsync;
+tf.sync = tfSync;
 
 export {setResolver};
 

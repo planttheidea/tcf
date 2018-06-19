@@ -263,3 +263,131 @@ test('if tcf.sync is the same method as tcfSync', (t) => {
 test('if setResolver is exported', (t) => {
   t.is(index.setResolver, resolver.setResolver);
 });
+
+test('if tfSync will handle a successful try scenario', (t) => {
+  const value = 'foo';
+
+  const tryFn = () => value;
+  const finallyFn = null;
+
+  const result = index.tfSync(tryFn, finallyFn);
+
+  t.is(result, value);
+});
+
+test('if tfSync will handle a failed try scenario with no catch', (t) => {
+  const tryFn = () => {
+    throw new Error('boom');
+  };
+  const finallyFn = null;
+
+  try {
+    index.tfSync(tryFn, finallyFn);
+
+    t.fail('Should throw');
+  } catch (error) {
+    t.pass(error);
+  }
+});
+
+test('if tfSync will handle a successful try scenario with a finally with no return in the finally', (t) => {
+  const value = 'foo';
+
+  const tryFn = () => value;
+  const finallyFn = sinon.spy();
+
+  const result = index.tfSync(tryFn, finallyFn);
+
+  t.is(result, value);
+  t.true(finallyFn.calledOnce);
+});
+
+test('if tfSync will handle a successful try scenario with a finally with a return in the finally', (t) => {
+  const value = 'foo';
+  const otherValue = 'bar';
+
+  const tryFn = () => value;
+  const finallyFn = sinon.stub().returns(otherValue);
+
+  const result = index.tfSync(tryFn, finallyFn);
+
+  t.is(result, otherValue);
+  t.true(finallyFn.calledOnce);
+});
+
+test('if tfAsync will handle a successful try scenario', async (t) => {
+  const value = 'foo';
+
+  const tryFn = async () => value;
+  const finallyFn = null;
+
+  const result = await index.tfAsync(tryFn, finallyFn);
+
+  t.is(result, value);
+});
+
+test('if tfAsync will handle a failed try scenario with no catch', async (t) => {
+  const tryFn = async () => {
+    throw new Error('boom');
+  };
+  const finallyFn = null;
+
+  try {
+    await index.tfAsync(tryFn, finallyFn);
+
+    t.fail('Should throw');
+  } catch (error) {
+    t.pass(error);
+  }
+});
+
+test('if tfAsync will handle a successful try scenario with a finally with no return in the finally', async (t) => {
+  const value = 'foo';
+
+  const tryFn = async () => value;
+  const finallyFn = sinon.spy();
+
+  const result = await index.tfAsync(tryFn, finallyFn);
+
+  t.is(result, value);
+  t.true(finallyFn.calledOnce);
+});
+
+test('if tfAsync will handle a successful try scenario with a finally with a return in the finally', async (t) => {
+  const value = 'foo';
+  const otherValue = 'bar';
+
+  const tryFn = async () => value;
+  const finallyFn = sinon.stub().returns(otherValue);
+
+  const result = await index.tfAsync(tryFn, finallyFn);
+
+  t.is(result, otherValue);
+  t.true(finallyFn.calledOnce);
+});
+
+test('if tf will handle sync operations', (t) => {
+  const value = 'foo';
+
+  const tryFn = () => value;
+  const finallyFn = sinon.spy();
+
+  const result = index.tf(tryFn, finallyFn);
+
+  t.is(result, value);
+
+  t.true(finallyFn.calledOnce);
+});
+
+test('if tf will handle async operations', async (t) => {
+  const value = 'foo';
+
+  const tryFn = async () => value;
+  const finallyFn = sinon.spy();
+
+  const result = await index.tf(tryFn, finallyFn);
+
+  t.is(result, value);
+
+  t.true(finallyFn.calledOnce);
+});
