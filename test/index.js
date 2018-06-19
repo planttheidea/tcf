@@ -252,18 +252,6 @@ test('if tcf will handle async operations', async (t) => {
   t.true(finallyFn.calledOnce);
 });
 
-test('if tcf.async is the same method as tcfAsync', (t) => {
-  t.is(index.tcf.async, index.tcfAsync);
-});
-
-test('if tcf.sync is the same method as tcfSync', (t) => {
-  t.is(index.tcf.sync, index.tcfSync);
-});
-
-test('if setResolver is exported', (t) => {
-  t.is(index.setResolver, resolver.setResolver);
-});
-
 test('if tfSync will handle a successful try scenario', (t) => {
   const value = 'foo';
 
@@ -390,4 +378,28 @@ test('if tf will handle async operations', async (t) => {
   t.is(result, value);
 
   t.true(finallyFn.calledOnce);
+});
+
+test('if tcf.async is the same method as tcfAsync', (t) => {
+  t.is(index.tcf.async, index.tcfAsync);
+});
+
+test('if tcf.sync is the same method as tcfSync', (t) => {
+  t.is(index.tcf.sync, index.tcfSync);
+});
+
+test('if tf.async is the same method as tfAsync', (t) => {
+  t.is(index.tf.async, index.tfAsync);
+});
+
+test('if tf.sync is the same method as tfSync', (t) => {
+  t.is(index.tf.sync, index.tfSync);
+});
+
+test('if tcf is the default export', (t) => {
+  t.is(index.default, index.tcf);
+});
+
+test('if setResolver is exported', (t) => {
+  t.is(index.setResolver, resolver.setResolver);
 });
